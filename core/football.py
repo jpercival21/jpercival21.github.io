@@ -13,6 +13,5 @@ def get_matches():
         f"{BASE_URL}/competitions/WC/matches",
         headers=HEADERS
     )
-    print(response)
     response.raise_for_status()
     return response.json()["matches"]

@@ -190,6 +190,8 @@
     <table>
         <thead>
             <tr>
+            <th>Group</th>
+            <th>Stage</th>
                 <th>Home</th>
                 <th style="text-align:center">Score</th>
                 <th style="text-align:right">Away</th>
@@ -199,6 +201,12 @@
         <tbody>
             {% for match in matches %}
             <tr>
+            <td>
+                {{ match.group }}
+            </td>
+            <td>
+                {{ match.stage }}
+            </td>
                 <td>
                     <div class="tn">
                         {% if match.homeTeam.flag %}
