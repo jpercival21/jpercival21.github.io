@@ -2,6 +2,7 @@
 name = "sweepstakes"
 version = "0.1.0"
 description = "World Cup Sweepstakes Website"
+package-mode = "false"
 authors = [
     {name = "jpercival21",email = "jpercival21@gmail.com"}
 ]
