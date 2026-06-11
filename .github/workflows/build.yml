@@ -26,8 +26,10 @@ jobs:
 
       - name: Install dependencies
         run: poetry install
-
+      
       - name: Build static site
+        env:
+          FOOTBALL_API_KEY: ${{ secrets.FOOTBALL_API_KEY }}
         run: |
           poetry run python manage.py collectstatic --noinput
           poetry run python manage.py distill-local docs --force

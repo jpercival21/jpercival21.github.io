@@ -1,3 +1,4 @@
+{% load dict_extras %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,6 +6,51 @@
     <title>Sweepstake</title>
 </head>
 <body>
-    <h1>helloworld</h1>
+    <h1>World Cup Sweepstake</h1>
+
+    <h2>Draws</h2>
+    <table>
+        <tr><th>Team</th><th>Person</th></tr>
+        {% for team, person in sweepstake.items %}
+        <tr>
+            <td>{{ team }}</td>
+            <td>{{ person }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Results</h2>
+    <table>
+        <tr>
+            <th>Home</th>
+            <th>Score</th>
+            <th>Away</th>
+            <th>Status</th>
+        </tr>
+        {% for match in matches %}
+        <tr>
+            <td>
+                {{ match.homeTeam.name }}
+                {% if match.homeTeam.name in sweepstake %}
+                    <small>({{ sweepstake|get_item:match.homeTeam.name }})</small>
+                {% endif %}
+            </td>
+            <td>
+                {% if match.status == "FINISHED" %}
+                    {{ match.score.fullTime.home }} - {{ match.score.fullTime.away }}
+                {% else %}
+                    vs
+                {% endif %}
+            </td>
+            <td>
+                {{ match.awayTeam.name }}
+                {% if match.awayTeam.name in sweepstake %}
+                    <small>({{ sweepstake|get_item:match.awayTeam.name }})</small>
+                {% endif %}
+            </td>
+            <td>{{ match.status }}</td>
+        </tr>
+        {% endfor %}
+    </table>
 </body>
 </html>
