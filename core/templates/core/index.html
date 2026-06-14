@@ -192,10 +192,11 @@
             <tr>
             <th>Group</th>
             <th>Stage</th>
-                <th>Home</th>
-                <th style="text-align:center">Score</th>
-                <th style="text-align:right">Away</th>
-                <th style="text-align:center">Status</th>
+            <th>Home</th>
+            <th style="text-align:center">Score</th>
+            <th style="text-align:right">Away</th>
+            <th style="text-align:center">Status</th>
+            <th style="text-align:center">Highlights</th>
             </tr>
         </thead>
         <tbody>
@@ -243,6 +244,11 @@
                         <span class="badge b-live">Live</span>
                     {% else %}
                         <span class="badge b-sched">Scheduled</span>
+                    {% endif %}
+                </td>
+                <td style="text-align:center">
+                    {% if match.status == "FINISHED" %}
+                        <a href="https://www.youtube.com/results?search_query={{ match.homeTeam.name }}+vs+{{ match.awayTeam.name }}+highlights+world+cup+2026" target="_blank" rel="noopener noreferrer">Watch Highlights</a>
                     {% endif %}
                 </td>
             </tr>
