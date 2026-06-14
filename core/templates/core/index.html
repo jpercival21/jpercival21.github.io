@@ -190,7 +190,7 @@
     <table>
         <thead>
             <tr>
-            <th>Group</th>
+            <th>Date</th>
             <th>Stage</th>
             <th>Home</th>
             <th style="text-align:center">Score</th>
@@ -203,10 +203,14 @@
             {% for match in matches %}
             <tr>
             <td>
-                {{ match.group }}
+                {{ match.date }}
             </td>
             <td>
-                {{ match.stage }}
+                {% if match.stage == "GROUP_STAGE" %}
+                    {{ match.group }}
+                {% else %}
+                    {{ match.stage }}
+                {% endif %}
             </td>
                 <td>
                     <div class="tn">
