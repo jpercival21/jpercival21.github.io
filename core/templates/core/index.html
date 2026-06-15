@@ -153,6 +153,116 @@
         .b-fin { background: #1a2a1a; color: #4a8a4a; border: 1px solid #2a3a2a; }
         .b-live { background: #2a1a1a; color: #a04040; border: 1px solid #3a2a2a; }
         .b-sched { background: #1a1a1a; color: #555; border: 1px solid #222; }
+
+        /* Featured match card */
+        .next-match {
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 3rem;
+        }
+        .next-match-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 18px;
+            border-bottom: 1px solid #1e1e1e;
+            font-family: -apple-system, sans-serif;
+            font-size: 11px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #666;
+        }
+        .next-match-status { display: flex; align-items: center; gap: 7px; }
+        .live-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #c2554a;
+            animation: live-pulse 1.6s ease-in-out infinite;
+        }
+        @keyframes live-pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.35; transform: scale(0.75); }
+        }
+        .next-match-body { display: flex; align-items: stretch; }
+        .nm-team {
+            flex: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 32px 20px;
+            min-height: 130px;
+            overflow: hidden;
+        }
+        .nm-team-bg { position: absolute; inset: 0; }
+        .nm-team-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.16;
+            filter: saturate(0.7);
+        }
+        .nm-team-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(17,17,17,0.25), rgba(17,17,17,0.92));
+        }
+        .nm-team-content { position: relative; z-index: 1; }
+        .nm-flag {
+            width: 42px;
+            height: auto;
+            border-radius: 2px;
+            margin-bottom: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.45);
+        }
+        .nm-team-name { font-size: 19px; letter-spacing: 0.03em; }
+        .nm-person {
+            font-size: 11px;
+            color: #888;
+            margin-top: 6px;
+            font-style: italic;
+            font-family: -apple-system, sans-serif;
+        }
+        .nm-center {
+            flex-shrink: 0;
+            width: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-left: 1px solid #1e1e1e;
+            border-right: 1px solid #1e1e1e;
+            padding: 20px 10px;
+        }
+        .nm-score {
+            font-size: 30px;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            white-space: nowrap;
+        }
+        .nm-vs {
+            font-size: 12px;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: #3a3a3a;
+            font-family: -apple-system, sans-serif;
+        }
+        @media (max-width: 600px) {
+            .next-match-body { flex-direction: column; }
+            .nm-center {
+                width: 100%;
+                border-left: none;
+                border-right: none;
+                border-top: 1px solid #1e1e1e;
+                border-bottom: 1px solid #1e1e1e;
+                padding: 12px;
+            }
+            .nm-team { padding: 28px 20px; }
+        }
     </style>
 </head>
 <body>
@@ -193,68 +303,67 @@
             Next Up
         {% endif %}
     </p>
-    <table>
-        <thead>
-            <tr>
-            <th>Date</th>
-            <th>Stage</th>
-            <th>Home</th>
-            <th style="text-align:center">Score</th>
-            <th style="text-align:right">Away</th>
-            <th style="text-align:center">Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-            <td>
+    <div class="next-match">
+        <div class="next-match-meta">
+            <span>
                 {{ next_match.date }} {{ next_match.time }}
-            </td>
-            <td>
+                &nbsp;·&nbsp;
                 {% if next_match.stage == "GROUP_STAGE" %}
                     {{ next_match.group }}
                 {% else %}
                     {{ next_match.stage }}
                 {% endif %}
-            </td>
-                <td>
-                    <div class="tn">
-                        {% if next_match.homeTeam.flag %}
-                            <img src="{{ next_match.homeTeam.flag }}" alt="" class="flag-sm">
-                        {% endif %}
-                        {{ next_match.homeTeam.name }}
-                    </div>
+            </span>
+            <span class="next-match-status">
+                {% if next_match.status == "IN_PLAY" %}
+                    <span class="live-dot"></span>Live
+                {% else %}
+                    Scheduled
+                {% endif %}
+            </span>
+        </div>
+        <div class="next-match-body">
+            <div class="nm-team">
+                <div class="nm-team-bg">
+                    {% if next_match.homeTeam.flag %}
+                        <img src="{{ next_match.homeTeam.flag }}" alt="">
+                    {% endif %}
+                </div>
+                <div class="nm-team-content">
+                    {% if next_match.homeTeam.flag %}
+                        <img src="{{ next_match.homeTeam.flag }}" alt="{{ next_match.homeTeam.name }} flag" class="nm-flag">
+                    {% endif %}
+                    <div class="nm-team-name">{{ next_match.homeTeam.name }}</div>
                     {% if next_match.homeTeam.person %}
-                        <div class="pt">{{ next_match.homeTeam.person }}</div>
+                        <div class="nm-person">{{ next_match.homeTeam.person }}</div>
                     {% endif %}
-                </td>
-                <td class="score">
-                    {% if next_match.status == "IN_PLAY"%}
-                        {{ next_match.score.fullTime.home }} – {{ next_match.score.fullTime.away }}
-                    {% else %}
-                        <span class="vs">vs</span>
+                </div>
+            </div>
+            <div class="nm-center">
+                {% if next_match.status == "IN_PLAY" %}
+                    <div class="nm-score">{{ next_match.score.fullTime.home }} – {{ next_match.score.fullTime.away }}</div>
+                {% else %}
+                    <div class="nm-vs">vs</div>
+                {% endif %}
+            </div>
+            <div class="nm-team">
+                <div class="nm-team-bg">
+                    {% if next_match.awayTeam.flag %}
+                        <img src="{{ next_match.awayTeam.flag }}" alt="">
                     {% endif %}
-                </td>
-                <td class="away">
-                    <div class="tn">
-                        {{ next_match.awayTeam.name }}
-                        {% if next_match.awayTeam.flag %}
-                            <img src="{{ next_match.awayTeam.flag }}" alt="" class="flag-sm" style="margin-right:0; margin-left:10px;">
-                        {% endif %}
-                    </div>
+                </div>
+                <div class="nm-team-content">
+                    {% if next_match.awayTeam.flag %}
+                        <img src="{{ next_match.awayTeam.flag }}" alt="{{ next_match.awayTeam.name }} flag" class="nm-flag">
+                    {% endif %}
+                    <div class="nm-team-name">{{ next_match.awayTeam.name }}</div>
                     {% if next_match.awayTeam.person %}
-                        <div class="pt">{{ next_match.awayTeam.person }}</div>
+                        <div class="nm-person">{{ next_match.awayTeam.person }}</div>
                     {% endif %}
-                </td>
-                <td style="text-align:center">
-                    {% if next_match.status == "IN_PLAY" %}
-                        <span class="badge b-live">Live</span>
-                    {% else %}
-                        <span class="badge b-sched">Scheduled</span>
-                    {% endif %}
-                </td>
-            </tr>
-        </tbody>
-    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <p class="section-label">Results</p>
     <table>
