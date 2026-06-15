@@ -24,9 +24,9 @@ def get_matches():
         utc_dt = datetime.fromisoformat(match["utcDate"].replace("Z", "+00:00"))
         uk_dt = utc_dt.astimezone(UK_TZ)
 
-        match["date"] = uk_dt.strftime("%Y-%m-%d")
+        match["date"] = uk_dt.strftime("%A, %d %B")
         match["time"] = uk_dt.strftime("%H:%M")
 
-        print(match["date"], match["time"], match["homeTeam"]["name"], "vs", match["awayTeam"]["name"])
+        # print(match["date"], match["time"], match["homeTeam"]["name"], "vs", match["awayTeam"]["name"])
 
     return matches
