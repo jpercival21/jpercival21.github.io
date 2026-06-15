@@ -20,13 +20,19 @@ def get_matches():
     response.raise_for_status()
     matches = response.json()["matches"]
 
+    next_match = None
+
     for match in matches:
         utc_dt = datetime.fromisoformat(match["utcDate"].replace("Z", "+00:00"))
         uk_dt = utc_dt.astimezone(UK_TZ)
 
         match["date"] = uk_dt.strftime("%A, %d %B")
         match["time"] = uk_dt.strftime("%H:%M")
+        if match["status"] == "IN_PLAY":
+            next_match = match
+        elif match["status"] != "FINISHED" and not next_match:
+            next_match = match
 
         # print(match["date"], match["time"], match["homeTeam"]["name"], "vs", match["awayTeam"]["name"])
 
-    return matches
+    return matches, next_match
