@@ -5,7 +5,7 @@ from .data import SWEEPSTAKE, FLAG_IMG
 from collections import defaultdict
 
 def index(request):
-    matches = get_matches()
+    matches, next_match = get_matches()
 
     people = defaultdict(list)
     for team, person in SWEEPSTAKE.items():
@@ -24,5 +24,6 @@ def index(request):
 
     return render(request, 'core/index.html', {
         'matches': matches,
+        'next_match': next_match,
         'people': dict(people),
     })
